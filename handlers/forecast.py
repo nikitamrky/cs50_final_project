@@ -39,8 +39,12 @@ async def fcast_get_date(message: Message, state: FSMContext) -> None:
 
     # Reprompt if no date in message
     if not match:
-        await message.reply_to_message("There is no correct date in message. Please write in format DD.MM.YYYY")
+        await message.reply("There is no correct date in message. Please write as DD.MM.YYYY.")
         return
+
+    # TODO: Repromt if date is not in correct range
+    date = datetime.strptime(match.group(), "%d.%m.%Y")
+
 
     # Provide forecast if date is correct
     if ("04.12.2023" in message.text.lower()) or ("tomorrow" in message.text.lower()):
