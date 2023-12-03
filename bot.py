@@ -1,12 +1,10 @@
 import asyncio
 import logging
 from os import getenv
-from aiogram import Bot, Dispatcher, Router, F
-from aiogram.types import Message
-from aiogram.filters import CommandStart
+from aiogram import Bot, Dispatcher, Router
+from aiogram.enums import ParseMode
 from aiogram.fsm.storage.memory import MemoryStorage
 from handlers import main_router
-from handlers.type_error import TypeErrorFilter
 
 
 async def main():
@@ -24,7 +22,7 @@ async def main():
 
 
     # Bot instanse
-    bot = Bot(token=TOKEN)
+    bot = Bot(token=TOKEN, parse_mode="HTML")
 
 
     # Make root router (dispatcher) and define storage type for FSM
@@ -33,25 +31,6 @@ async def main():
 
     # Include routers in dispatcher
     dp.include_routers(main_router.router)
-    # TODO: dp.include_routers(...)
-
-
-    # Start command handler
-    @dp.message(CommandStart())
-    async def cmd_start(message: Message) -> None:
-        await message.answer(
-            "Hi! What do you want: get forecast or fill an application?",
-            # TODO: reply_markup=
-        )
-
-
-    # Bacis catch all handler
-    @dp.message(TypeErrorFilter())
-    async def catchall_default(message: Message) -> None:
-        await message.answer(
-            "I understand only when you press buttons on write relevant text."
-        )
-        # TODO: Reprompt user
 
 
     # Launch bot and ingore all collected incoming messages
