@@ -5,7 +5,6 @@ from aiogram import Bot, Dispatcher, Router, F
 from aiogram.types import Message
 from aiogram.filters import CommandStart
 from aiogram.fsm.storage.memory import MemoryStorage
-
 from handlers import main_router
 from handlers.type_error import TypeErrorFilter
 

@@ -3,24 +3,14 @@ from aiogram.filters import Command
 from aiogram.types import Message
 from aiogram.filters import StateFilter
 from aiogram.fsm.context import FSMContext
-from aiogram.fsm.state import State, StatesGroup
+from FSM import Forecast, Application
 from handlers import forecast
-# TODO: include another routers?
 
 
 router = Router()
 
 
 router.include_routers(forecast.router)
-
-
-class Forecast(StatesGroup): # TODO: Похоже, что стейты недоступны во вложенных роутерах
-    city_choice = State()
-    date_choice = State()
-
-
-class Application(StatesGroup): # Не уверен, что стейты будут доступны во вложенных роутерах
-    people_num_choice = State()
 
 
 @router.message(StateFilter(None), F.text.lower().contains("forecast"))
