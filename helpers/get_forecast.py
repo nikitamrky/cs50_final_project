@@ -12,8 +12,8 @@ def get(
     """
     d = date.strftime('%d.%m.%Y')
     API_KEY = getenv("WEATHER_API_KEY")
-    s = "https://api.openweathermap.org/data/2.5/weather?" \
-        "name=%s" \
+    s = "https://api.openweathermap.org/data/2.5/forecast?lang=ru&units=metric" \
+        "q=%s" \
         "&appid=%s"\
         .format("moscow", API_KEY)
     r = requests.get(s)
