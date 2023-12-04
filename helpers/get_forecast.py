@@ -12,10 +12,12 @@ def get(
     """
     d = date.strftime('%d.%m.%Y')
     API_KEY = getenv("WEATHER_API_KEY")
-    s = "https://api.openweathermap.org/data/2.5/forecast?lang=ru&units=metric" \
-        "q=%s" \
-        "&appid=%s"\
-        .format("moscow", API_KEY)
+    # s = "https://api.openweathermap.org/data/2.5/forecast?lang=eng&units=metric" \
+    #     "&q=%s" \
+    #     "&appid=%s"\
+    #     .format("moscow", API_KEY)
+
+    s = "https://api.openweathermap.org/data/2.5/forecast?lang=eng&units=metric&q=moscow&appid=7a5845b6c6ebf5ac05a811ec95a85f1e"
     r = requests.get(s)
 
     if not r.status_code == requests.codes.ok:
