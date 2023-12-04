@@ -17,7 +17,7 @@ router.include_routers(forecast.router)
 
 # "Start" command handler
 @router.message(CommandStart())
-async def cmd_start(message: Message) -> None:
+async def cmd_start(message: Message, state: FSMContext) -> None:
     await message.answer(
         "Hi! What do you want: get forecast or fill an application?",
         reply_markup=g.fcast_or_app_kb(),

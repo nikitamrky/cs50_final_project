@@ -5,6 +5,7 @@ from aiogram.filters import StateFilter
 from aiogram.fsm.context import FSMContext
 from FSM import Forecast
 from keyboards import general as g, forecast as f
+from helpers import get_forecast
 import re
 from datetime import datetime, timedelta
 
@@ -17,6 +18,7 @@ async def fcast_get_city(message: Message, state: FSMContext) -> None:
     """
     Get city for forecast
     """
+    # TODO: complete city receiving implementation
     if ("moscow" in message.text.lower()):
         await message.answer(
             "Specify the date.\n"
@@ -57,7 +59,22 @@ async def fcast_get_date(message: Message, state: FSMContext) -> None:
 
     # Provide forecast if date is correct
     if date:
-        await message.answer("That's forecast for Moscow: ...")
+        # TODO: complete request implementation
+        forecast = get_forecast.get("moscow", date)
+
+        if not forecast:
+            await message.answer(
+                "My apology, I couldn't get forecast. Try later, please.",
+                reply_markup=g.fcast_or_app_kb(),
+                input_field_placeholder="Select option"
+            )
+            return
+
+        await message.answer(
+            f"That's forecast for Moscow, {date.strftime('%d.%m.%Y')}: \n"
+            f"{forecast}"
+        )
+
         await message.answer(
             "Do you want to go there?",
             reply_markup=g.yes_no_kb()

@@ -21,6 +21,13 @@ async def main():
         exit(1)
 
 
+    # Get openweathermap.org API key
+    API_KEY = getenv("WEATHER_API_KEY")
+    if API_KEY == None:
+        print("Environment variable WEATHER_API_KEY not found")
+        exit(1)
+
+
     # Bot instanse
     bot = Bot(token=TOKEN, parse_mode="HTML")
 
