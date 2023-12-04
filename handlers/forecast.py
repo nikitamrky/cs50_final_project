@@ -6,7 +6,7 @@ from aiogram.fsm.context import FSMContext
 from FSM import Forecast
 from keyboards import general as g, forecast as f
 import re
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 router = Router()
@@ -33,21 +33,30 @@ async def fcast_get_date(message: Message, state: FSMContext) -> None:
     Get date for forecast
     """
 
+    # Check if message has "tomorrow"
+    if "tomorrow" in message.text.lower():
+        date = datetime.now() + timedelta(days=1)
+
     # Check if message has date
-    date_pattern = re.compile(r'\b\d{1,2}\.\d{1,2}\.\d{4}\b')
-    match = date_pattern.search(message.text)
+    else:
+        date_pattern = re.compile(r'\b\d{1,2}\.\d{1,2}\.\d{4}\b')
+        match = date_pattern.search(message.text)
 
-    # Reprompt if no date in message
-    if not match:
-        await message.reply("There is no correct date in message. Please write as DD.MM.YYYY.")
-        return
+        # Reprompt if no date in message
+        if not match:
+            await message.reply("There is no correct date in message. Please write as DD.MM.YYYY.")
+            return
 
-    # TODO: Repromt if date is not in correct range
-    date = datetime.strptime(match.group(), "%d.%m.%Y")
-
+        # Repromt if date is not in correct range
+        date = datetime.strptime(match.group(), "%d.%m.%Y")
+        cur_date = datetime.now()
+        td = date - cur_date
+        if td.days < 0 or td.days > 4:
+            await message.reply("Date must be in 4 days range from today.")
+            return
 
     # Provide forecast if date is correct
-    if ("04.12.2023" in message.text.lower()) or ("tomorrow" in message.text.lower()):
+    if date:
         await message.answer("That's forecast for Moscow: ...")
         await message.answer(
             "Do you want to go there?",
