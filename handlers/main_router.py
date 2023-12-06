@@ -7,6 +7,7 @@ from FSM import Forecast, Application
 from handlers import forecast
 from handlers.type_error import TypeErrorFilter
 from keyboards import general as g
+import spacy
 
 
 router = Router()
@@ -41,7 +42,7 @@ async def catchall_default(message: Message) -> None:
 async def start_weather(message: Message, state: FSMContext) -> None:
     await message.answer(
         "Provide city for checking forecast.\n"
-        +"<i>e.g. \"Harvard\"</i>",
+        +"<i>e.g. \"Cambridge\"</i>",
         reply_markup=ReplyKeyboardRemove(),
     )
     await state.set_state(Forecast.city_choice)

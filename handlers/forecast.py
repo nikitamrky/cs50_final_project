@@ -8,9 +8,13 @@ from keyboards import general as g, forecast as f
 from helpers import get_forecast
 import re
 from datetime import datetime, timedelta
+import spacy
 
 
 router = Router()
+
+
+NER = spacy.load("en_core_web_sm")
 
 
 @router.message(StateFilter(Forecast.city_choice))
@@ -18,9 +22,21 @@ async def fcast_get_city(message: Message, state: FSMContext) -> None:
     """
     Get city for forecast
     """
-    # TODO: complete city receiving implementation
-    if ("moscow" in message.text.lower()):
-        await state.update_data(city=message.text.lower())
+    # TODO: complete city extraction implementation
+    if (len(message.text) > 1 and len(message.text) < 20):
+
+        # Extract cities from message
+        doc = NER(message.text)
+        cities = [ent.text for ent in doc.ents if ent.label_=="GPE"]
+
+        # Check if number of cities != 1
+        if len(cities) == 0:
+            await message.reply("Couldn't find any cities in your message. Try again.")
+            return
+        elif len(cities) > 1:
+            await message.reply("I can't multitask, sorry. I'll try to find a forecast for 1st city.")
+
+        await state.update_data(city=cities[0])
         await message.answer(
             "Specify the date.\n"
             + "<i>We can check forecast for 5 days from now.</i>",
@@ -29,12 +45,23 @@ async def fcast_get_city(message: Message, state: FSMContext) -> None:
         )
         await state.set_state(Forecast.date_choice)
 
+    else:
+        await message.reply("It doesn't seem like a city name. Try again.")
 
 @router.message(StateFilter(Forecast.date_choice))
 async def fcast_get_date(message: Message, state: FSMContext) -> None:
     """
     Get date for forecast
     """
+    # Check if user wants to change city
+    if "change" in message.text.lower():
+        await message.answer(
+            "Provide new city.\n"
+            + "<i>e.g. \"Budva\"</i>",
+            reply_markup=ReplyKeyboardRemove(),
+        )
+        await state.set_state(Forecast.city_choice)
+        return
 
     # Check if message has "tomorrow"
     if "tomorrow" in message.text.lower():
