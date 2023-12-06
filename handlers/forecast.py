@@ -56,7 +56,7 @@ async def fcast_get_date(message: Message, state: FSMContext) -> None:
     if "change" in message.text.lower():
         await message.answer(
             "Provide new city.\n"
-            + "<i>e.g. \"Budva\"</i>",
+            + "<i>e.g. \"Milan\"</i>",
             reply_markup=ReplyKeyboardRemove(),
         )
         await state.set_state(Forecast.city_choice)
