@@ -38,7 +38,7 @@ async def fcast_get_city(message: Message, state: FSMContext) -> None:
         await state.update_data(city=cities[0])
         await message.answer(
             "Specify the date.\n"
-            + "<i>We can check forecast for 5 days from now.</i>",
+            + "<i>We can check forecast for tomorrow or 3 days ahead.</i>",
             reply_markup=f.date_kb(),
             input_field_placeholder="DD.MM.YYYY"
         )
@@ -81,13 +81,13 @@ async def fcast_get_date(message: Message, state: FSMContext) -> None:
         cur_date = datetime.now()
         td = date - cur_date
         if td.days < 0 or td.days > 4:
-            await message.reply("Date must be in 4 days range from today.")
+            await message.reply("Date must be in 4 days range starting tomorrow.")
             return
 
     # Provide forecast if date is correct
     if date:
         user_data = await state.get_data()
-        forecast = get_forecast.get(user_data["city"], date)
+        forecast = await get_forecast.get(user_data["city"], date)
 
         if not forecast:
             await message.answer(
@@ -98,7 +98,7 @@ async def fcast_get_date(message: Message, state: FSMContext) -> None:
             return
 
         await message.answer(
-            f"That's forecast for {user_data['city'].capitalize()}, {date.strftime('%d.%m.%Y')}: \n"
+            f"That's forecast for {user_data['city'].capitalize()}, 12:00 {date.strftime('%d.%m.%Y')}: \n"
             f"{forecast}"
         )
 
