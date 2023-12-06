@@ -22,7 +22,6 @@ async def fcast_get_city(message: Message, state: FSMContext) -> None:
     """
     Get city for forecast
     """
-    # TODO: complete city extraction implementation
     if (len(message.text) > 1 and len(message.text) < 20):
 
         # Extract cities from message
