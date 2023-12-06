@@ -20,6 +20,7 @@ async def fcast_get_city(message: Message, state: FSMContext) -> None:
     """
     # TODO: complete city receiving implementation
     if ("moscow" in message.text.lower()):
+        await state.update_data(city=message.text.lower())
         await message.answer(
             "Specify the date.\n"
             + "<i>We can check forecast for 5 days from now.</i>",
@@ -59,8 +60,8 @@ async def fcast_get_date(message: Message, state: FSMContext) -> None:
 
     # Provide forecast if date is correct
     if date:
-        # TODO: complete request implementation
-        forecast = get_forecast.get("moscow", date)
+        user_data = await state.get_data()
+        forecast = get_forecast.get(user_data["city"], date)
 
         if not forecast:
             await message.answer(
@@ -71,7 +72,7 @@ async def fcast_get_date(message: Message, state: FSMContext) -> None:
             return
 
         await message.answer(
-            f"That's forecast for Moscow, {date.strftime('%d.%m.%Y')}: \n"
+            f"That's forecast for {user_data['city'].capitalize()}, {date.strftime('%d.%m.%Y')}: \n"
             f"{forecast}"
         )
 
