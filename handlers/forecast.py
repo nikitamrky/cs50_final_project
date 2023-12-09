@@ -28,14 +28,6 @@ async def fcast_get_city(message: Message, state: FSMContext) -> None:
         doc = NER(message.text)
         cities = [ent.text for ent in doc.ents if ent.label_=="GPE"]
 
-        # Check if number of cities != 1
-        # TODO: improve cities extraction? Or maybe ask if user sure that city name is correct.
-        # if len(cities) == 0:
-        #     await message.reply("Couldn't find any cities in your message. Try again.")
-        #     return
-        # elif len(cities) > 1:
-        #     await message.reply("I can't multitask, sorry. I'll try to find a forecast for 1st city.")
-
         if len(cities) > 1:
             await message.reply("I can't multitask, sorry. I'll try to find a forecast for 1st city.")
 
