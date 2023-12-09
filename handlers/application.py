@@ -31,7 +31,7 @@ async def start_points_handler(message: Message, state: FSMContext) -> None:
 async def app_city(message: Message, state: FSMContext) -> None:
     await message.answer("How many people are going?")
     # TODO: fix error "set_data() got an unexpected keyword argument 'city'"
-    await state.set_data(city=message.text)
+    await state.update_data(city=message.text)
     await state.set_state(Application.people_num_choice)
 
 
