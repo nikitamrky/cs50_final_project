@@ -16,4 +16,10 @@ class Application(StatesGroup):
     """
     States for application flow
     """
+    city_choice = State()
     people_num_choice = State()
+    date_choice = State()
+    budjet_choice = State()
+    name = State()
+    phone = State()
+    final = State()

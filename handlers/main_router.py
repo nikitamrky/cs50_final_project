@@ -5,6 +5,7 @@ from aiogram.filters import StateFilter, CommandStart
 from aiogram.fsm.context import FSMContext
 from FSM import Forecast, Application
 from handlers import forecast
+from handlers import application as app
 from handlers.type_error import TypeErrorFilter
 from keyboards import general as g
 import spacy
@@ -13,7 +14,7 @@ import spacy
 router = Router()
 
 
-router.include_routers(forecast.router)
+router.include_routers(forecast.router, app.router)
 
 
 # "Start" command handler
@@ -49,11 +50,17 @@ async def start_weather(message: Message, state: FSMContext) -> None:
 
 
 @router.message(StateFilter(None), F.text.lower().contains("application"))
-async def start_weather(message: Message, state: FSMContext) -> None:
-    await message.answer("Ok, you need application")
-    await state.set_state(Application.people_num_choice)
+@router.message(StateFilter(Forecast.result), F.text.lower().contains("yes"))
+async def start_application(message: Message, state: FSMContext) -> None:
+    """
+    Ask city if wasn't provided
+    or
+    Ask number of people if city is set in forecast flow
+    """
+    # Stored into handlers/application.py
+    await app.start_points_handler(message, state)
 
 
 @router.message(StateFilter(None))
-async def start_weather(message: Message) -> None:
+async def catch_all(message: Message) -> None:
     await message.answer("I don't understand you")

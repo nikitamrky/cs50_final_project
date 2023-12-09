@@ -1,5 +1,4 @@
 from aiogram import Router, F
-from aiogram.filters import Command
 from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram.filters import StateFilter
 from aiogram.fsm.context import FSMContext
@@ -26,6 +25,7 @@ async def fcast_get_city(message: Message, state: FSMContext) -> None:
 
         # Extract cities from message
         doc = NER(message.text)
+        cities = [ent.text for ent in doc.ents if ent.label_=="GPE"]
         cities = [ent.text for ent in doc.ents if ent.label_=="GPE"]
 
         if len(cities) > 1:
@@ -58,6 +58,7 @@ async def fcast_get_date(message: Message, state: FSMContext) -> None:
             + "<i>e.g. \"Milan\"</i>",
             reply_markup=ReplyKeyboardRemove(),
         )
+        await state.update_data(city=None)
         await state.set_state(Forecast.city_choice)
         return
 
