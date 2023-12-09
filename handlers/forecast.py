@@ -29,13 +29,20 @@ async def fcast_get_city(message: Message, state: FSMContext) -> None:
         cities = [ent.text for ent in doc.ents if ent.label_=="GPE"]
 
         # Check if number of cities != 1
-        if len(cities) == 0:
-            await message.reply("Couldn't find any cities in your message. Try again.")
-            return
-        elif len(cities) > 1:
+        # TODO: improve cities extraction? Or maybe ask if user sure that city name is correct.
+        # if len(cities) == 0:
+        #     await message.reply("Couldn't find any cities in your message. Try again.")
+        #     return
+        # elif len(cities) > 1:
+        #     await message.reply("I can't multitask, sorry. I'll try to find a forecast for 1st city.")
+
+        if len(cities) > 1:
             await message.reply("I can't multitask, sorry. I'll try to find a forecast for 1st city.")
 
-        await state.update_data(city=cities[0])
+        if cities:
+            await state.update_data(city=cities[0])
+        else:
+            await state.update_data(city=message.text)
         await message.answer(
             "Specify the date.\n"
             + "<i>We can check forecast for tomorrow or 3 days ahead.</i>",
@@ -91,10 +98,10 @@ async def fcast_get_date(message: Message, state: FSMContext) -> None:
 
         if not forecast:
             await message.answer(
-                "My apology, I couldn't get forecast. Try later, please.",
-                reply_markup=g.fcast_or_app_kb(),
-                input_field_placeholder="Select option"
+                "My apology, I couldn't get forecast. Maybe <b>city name</b> is not correct? Try again, please.",
+                reply_markup=ReplyKeyboardRemove()
             )
+            await state.set_state(Forecast.city_choice)
             return
 
         await message.answer(
