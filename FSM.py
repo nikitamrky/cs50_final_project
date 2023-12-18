@@ -18,8 +18,9 @@ class Application(StatesGroup):
     """
     city_choice = State()
     people_num_choice = State()
+    budget_choice = State()
     date_choice = State()
-    budjet_choice = State()
+    duration_choice = State()
     name = State()
     phone = State()
     final = State()
