@@ -69,19 +69,44 @@ async def app_budget(message: Message, state: FSMContext) -> None:
     try:
         people_num = int(message.text)
     except:
-        message.reply("Please provide an integer, e.g. \"3\", or send \"/start\" command.")
+        await message.reply("Please provide an integer, e.g. \"3\", or send \"/start\" command.")
         return
 
     # Reprompt if number of people is less than 0 or more than 20
     if people_num < 1 or people_num > 20:
-        message.reply("Sorry, we can offer tours only for 1-20 people. Please change the number.")
+        await message.reply("Sorry, we can offer tours only for 1-20 people. Please change the number.")
         return
 
-    # Ask budget
-    message.answer(
-        "What is the expected budget for the trip in US dollars?",
+    # Save data and ask budget
+    state.update_data(people_num=people_num)
+    await message.answer(
+        "What is the expected budget for the trip in US dollars? \n <i>e.g. \"1200\"</i>",
         reply_markup=ReplyKeyboardRemove()
     )
-    state.set_state(Application.budget_choice)
+    await state.set_state(Application.budget_choice)
 
 
+@router.message(StateFilter(Application.budget_choice))
+async def app_trip_date(message: Message, state: FSMContext) -> None:
+    """
+    Ask trip date
+    """
+
+    # Delete spaces if any
+    s = message.text
+    s.replace(" ", "")
+
+    # Repropmt if answer is no integer
+    try:
+        budget = int(s)
+    except:
+        await message.reply("Please provide an integer, e.g. \"800\" or \"2000\".")
+        return
+
+    # Reprompt if budget is lower than $50 per person
+    data = await state.get_data()
+    if  budget / data["people_num"] < 50:
+        message.reply(
+            "Sorry, we don't have offers cheaper than $50 per person." \
+            "Please change budget or send \"/start\" command"
+        )
