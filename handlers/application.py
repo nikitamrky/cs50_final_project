@@ -246,4 +246,12 @@ async def app_save(message: Message, state: FSMContext) -> None:
     Confirm application and save in in database
     """
 
-    pass
+    # Save "-" in comment variable if user didn't provide comment
+    if message.text.lower() == "skip":
+        comment = "-"
+
+    # Or case comment
+    else:
+        comment = message.text
+
+    # Save application in database
