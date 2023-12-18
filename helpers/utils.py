@@ -1,6 +1,7 @@
 import asyncio
 import re
 from aiogram.types import Message
+import sqlite3
 
 async def get_date(message: Message) -> str:
     """
@@ -42,3 +43,11 @@ async def get_phone(message: Message) -> str:
         return
 
     return match.group()
+
+
+async def save_app(data: dict) -> bool:
+    """
+    Save user application in database and return true if successful.
+    """
+
+    pass
