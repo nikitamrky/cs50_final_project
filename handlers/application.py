@@ -4,7 +4,7 @@ from aiogram.filters import StateFilter
 from aiogram.fsm.context import FSMContext
 from FSM import Forecast, Application
 from keyboards import application as a
-
+from helpers import utils
 
 router = Router()
 
@@ -75,6 +75,7 @@ async def app_budget(message: Message, state: FSMContext) -> None:
         return
 
     # Save data and ask budget
+    # TODO: add button for changing number of people
     await state.update_data(people_num=people_num)
     await message.answer(
         "What is the expected budget for the trip in US dollars? \n <i>e.g. \"1200\"</i>",
@@ -110,6 +111,7 @@ async def app_trip_date(message: Message, state: FSMContext) -> None:
         return
 
     # Save data and ask start date
+    # TODO: add button for changing budget
     await state.update_data(budget=budget)
     await message.answer("Provide the approximate start date of your trip as DD/MM/YYYY.")
     await state.set_state(Application.date_choice)
@@ -120,4 +122,17 @@ async def app_trip_duration(message: Message, state: FSMContext) -> None:
     """
     Ask for trip duration
     """
-    pass
+
+    # Reprompt if user wants to change budget
+
+    # Reprompt if no right formatted date in answer
+    date_str = await utils.get_date(message)
+    if not date_str:
+        return
+
+    else:
+        # Reprompt if date has passed
+        await message.answer(f"Date is {date_str}")
+
+
+

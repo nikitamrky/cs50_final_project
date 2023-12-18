@@ -49,7 +49,7 @@ async def fcast_get_city(message: Message, state: FSMContext) -> None:
 @router.message(StateFilter(Forecast.date_choice))
 async def fcast_get_date(message: Message, state: FSMContext) -> None:
     """
-    Get date for forecast
+    Ask date for forecast
     """
     # Check if user wants to change city
     if "change" in message.text.lower():
