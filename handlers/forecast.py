@@ -67,13 +67,14 @@ async def fcast_get_date(message: Message, state: FSMContext) -> None:
         date = datetime.now() + timedelta(days=1)
 
     # Check if message has date
+    # TODO: implement utils.get_date function instead of this stupid code
     else:
         date_pattern = re.compile(r'\b\d{1,2}\.\d{1,2}\.\d{4}\b')
         match = date_pattern.search(message.text)
 
         # Reprompt if no date in message
         if not match:
-            await message.reply("There is no correct date in message. Please write as DD.MM.YYYY.")
+            await message.reply("There is no correct date in message. Please enter date as DD.MM.YYYY.")
             return
 
         # Repromt if date is not in correct range

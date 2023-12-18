@@ -5,6 +5,7 @@ from aiogram.fsm.context import FSMContext
 from FSM import Forecast, Application
 from keyboards import application as a
 from helpers import utils
+from datetime import datetime
 
 router = Router()
 
@@ -91,8 +92,7 @@ async def app_trip_date(message: Message, state: FSMContext) -> None:
     """
 
     # Delete spaces if any
-    s = message.text
-    s.replace(" ", "")
+    s = message.text.replace(" ", "")
 
     # Repropmt if answer is no integer
     try:
@@ -124,15 +124,28 @@ async def app_trip_duration(message: Message, state: FSMContext) -> None:
     """
 
     # Reprompt if user wants to change budget
+    if message.text == "Change budget":
+        await message.answer("What is the expected budget for the trip in US dollars? \n<i>e.g. \"1200\"</i>")
+        await state.set_state(Application.budget_choice)
+        return
 
     # Reprompt if no right formatted date in answer
     date_str = await utils.get_date(message)
     if not date_str:
         return
 
+    # Reprompt if date has passed
     else:
-        # Reprompt if date has passed
-        await message.answer(f"Date is {date_str}")
+        date = datetime.strptime(date_str, "%d.%m.%Y")
+        cur_date = datetime.now()
+        td = date - cur_date
+        if td.days < 0:
+            await message.reply("We can't send you to the past! Please enter correct date as DD.MM.YYYY.")
+            return
 
+    # Save data and ask for trip duration
+    await state.update_data(start_date=date_str)
+    await message.answer(f"Date is {date_str}")
+    await state.set_state(Application.duration_choice)
 
 

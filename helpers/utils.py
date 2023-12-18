@@ -14,7 +14,10 @@ async def get_date(message: Message) -> re.Match:
 
     # Reprompt if no date in message
     if not match:
-        await message.reply("There is no correct date in message. Please write as DD.MM.YYYY.")
+        await message.reply(
+            "There is no correct date in message." \
+            "Please enter date as DD.MM.YYYY or send \"/start\" command."
+        )
         return
 
     return match.group()
