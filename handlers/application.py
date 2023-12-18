@@ -146,7 +146,7 @@ async def app_trip_duration(message: Message, state: FSMContext) -> None:
     # Save data and ask for trip duration
     # TODO: add keyboard with suggestions and "Change budget" button
     await state.update_data(start_date=date_str)
-    await message.answer("Approximately ow many days do you want to travel?")
+    await message.answer("Approximately how many days do you want to travel?")
     await state.set_state(Application.duration_choice)
 
 
@@ -170,7 +170,7 @@ async def app_name(message: Message, state: FSMContext) -> None:
     # Reprompt if duration is negative or more than 30 days:
     if duration < 1 or duration > 30:
         await message.reply(
-            "Sorry, we can only offer tours from 1 to 30 days." \
+            "Sorry, we can only offer tours from 1 to 30 days.\n" \
             "Please change duration or send \"/start\" command."
         )
         return
