@@ -3,6 +3,7 @@ from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram.filters import StateFilter
 from aiogram.fsm.context import FSMContext
 from FSM import Forecast, Application
+from keyboards import application as a
 
 
 router = Router()
@@ -24,14 +25,20 @@ async def start_points_handler(message: Message, state: FSMContext) -> None:
     # Ask number of people if cur_state == "Forecast.result"
     else:
         # TODO: make a keyboard with options
-        await message.answer("How many people will go on the tour?")
+        await message.answer(
+            "How many people will go on the tour?",
+            reply_markup=a.people_kb()
+        )
         await state.set_state(Application.people_num_choice)
 
 
 @router.message(StateFilter(Application.city_choice))
 async def app_city(message: Message, state: FSMContext) -> None:
     # TODO: make a keyboard with options
-    await message.answer("How many people will go on the tour?")
+    await message.answer(
+        "How many people will go on the tour?",
+        reply_markup=a.people_kb()
+    )
     await state.update_data(city=message.text)
     await state.set_state(Application.people_num_choice)
 
