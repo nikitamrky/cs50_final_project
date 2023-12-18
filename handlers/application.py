@@ -46,7 +46,15 @@ async def app_city(message: Message, state: FSMContext) -> None:
 
 
 @router.message(StateFilter(Application.people_num_choice))
-async def app_city(message: Message, state: FSMContext) -> None:
-    pass
+async def app_budget(message: Message, state: FSMContext) -> None:
+    if message.text == "Change city":
+        await message.answer("What city do you want to visit? \n<i>e.g. Istanbul</i>", reply_markup=ReplyKeyboardRemove())
+        await state.set_state(Application.city_choice)
+        return
+    try:
+        people_num = int(message.text)
+    except:
+        message.reply("Please provide an integer, e.g. \"3\", or send \"/start\" command.")
+        return
     # TODO: Extract number of people from text
     # TODO: Add a keyboard with suggestions
