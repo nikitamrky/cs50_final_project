@@ -235,7 +235,7 @@ async def app_final(message: Message, state: FSMContext) -> None:
         f"Budget, $: {data['budget']}\n" \
         f"Trip date: {data['start_date']}\n" \
         f"Trip duration, days: {data['duration']}</b>\n\n" \
-        "If everything is correct, please write additional comment in this message or press \"Skip\".",
+        "If everything is correct, please write additional comment in next message or press \"Skip\".",
     )
     await state.set_state(Application.final)
 
