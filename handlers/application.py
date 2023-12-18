@@ -36,9 +36,6 @@ async def start_points_handler(message: Message, state: FSMContext) -> None:
 async def app_city(message: Message, state: FSMContext) -> None:
     """
     Ask city
-    :param message:
-    :param state:
-    :return:
     """
 
     await message.answer(
