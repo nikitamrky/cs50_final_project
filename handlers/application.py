@@ -18,12 +18,12 @@ async def start_points_handler(message: Message, state: FSMContext) -> None:
 
     # If user got here after /start command
     if cur_state == None:
-        await message.answer("State None, what city do you want to go?")
+        await message.answer("What city do you want to visit? \n<i>e.g. Istanbul</i>")
         await state.set_state(Application.city_choice)
 
     # Ask number of people if cur_state == "Forecast.result"
     else:
-        await message.answer("State F.result, how many people are going?")
+        await message.answer("How many people will go on the tour?")
         await state.set_state(Application.people_num_choice)
 
 
