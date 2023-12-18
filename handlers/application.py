@@ -144,7 +144,7 @@ async def app_trip_duration(message: Message, state: FSMContext) -> None:
             return
 
     # Save data and ask for trip duration
-    # TODO: add keyboard with suggestions and "Change budget" button
+    # TODO: add keyboard with suggestions and "Change budget" and "Main menu" buttons
     await state.update_data(start_date=date_str)
     await message.answer("Approximately how many days do you want to travel?")
     await state.set_state(Application.duration_choice)
@@ -178,6 +178,7 @@ async def app_name(message: Message, state: FSMContext) -> None:
     # Save data and ask user's name
     await state.update_data(duration=duration)
     # TODO: get username from Bot API
+    # TODO: add keyboard with "Change duration" and "Main menu" buttons
     await message.answer(
         f"Is your name Ababadaba? Please send \"yes\" or write correct name",
     )
@@ -197,4 +198,19 @@ async def app_phone(message: Message, state: FSMContext) -> None:
 
     # Save user's name from their answer
     else:
-        pass
+        # TODO: reprompt if user input is numeric or smth
+        name = message.text.capitalize()
+        await state.update_data(name=name)
+
+    # Ask phone
+    await message.answer(
+        "Please enter your phone number, we will contact you during business hours.\n" \
+        "<i>e.g. \"(617) 555−1234\""
+    )
+    state.set_state(Application.phone)
+
+
+@router.message(StateFilter(Application.phone))
+async def app_final(message: Message, state: FSMContext) -> None:
+    pass
+
