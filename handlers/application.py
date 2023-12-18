@@ -106,7 +106,12 @@ async def app_trip_date(message: Message, state: FSMContext) -> None:
     # Reprompt if budget is lower than $50 per person
     data = await state.get_data()
     if  budget / data["people_num"] < 50:
-        message.reply(
+        await message.reply(
             "Sorry, we don't have offers cheaper than $50 per person." \
             "Please change budget or send \"/start\" command"
         )
+        return
+
+    # Ask start date
+    await message.answer("Provide the approximate start date of your trip as DD/MM/YYYY.")
+    await state.set_state(Application.date_choice)
