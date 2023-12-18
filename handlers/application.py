@@ -212,5 +212,29 @@ async def app_phone(message: Message, state: FSMContext) -> None:
 
 @router.message(StateFilter(Application.phone))
 async def app_final(message: Message, state: FSMContext) -> None:
-    pass
+    """
+    Save phone number and ask for confirmation or additional comment.
+    """
 
+    # Return if there is no valid phone number
+    phone = await utils.get_phone(message)
+    if not phone:
+        return
+
+    # Save data
+    await state.update_data(phone=phone)
+
+    # Ask confirmation or additional comment
+    data = await state.get_data()
+    await message.answer(
+        "Wonderful! Please review your application:\n\n" \
+        f"<b>Your name: {data['name']}\n" \
+        f"Phone number: {data['phone']}\n" \
+        f"Trip to: {data['city']}" \
+        f"Number of participants: {data['people_num']}\n" \
+        f"Budget, $: {data['budget']}\n" \
+        f"Start date: {data['start_date']}\n" \
+        f"Approximate duration: {data['duration']}</b>\n\n" \
+        "If everything is correct, please write additional comment in this message or press \"Skip\"",
+    )
+    state.set_state(Application.final)
