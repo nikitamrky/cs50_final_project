@@ -58,13 +58,14 @@ async def save_app(data: dict, comment: str) -> bool:
     try:
         db.execute(
             "INSERT INTO applications (name, phone, city, people, budget, start_date, duration, comment)" \
-            "VALUES (?, ?, ?, ?, ?, ?, ?)",
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
             (
                 data['name'],
                 data['phone'],
                 data['city'],
                 data['people_num'],
                 data['budget'],
+                data['start_date'],
                 data['duration'],
                 comment
             )
