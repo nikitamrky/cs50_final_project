@@ -226,6 +226,7 @@ async def app_final(message: Message, state: FSMContext) -> None:
 
     # Ask confirmation or additional comment
     data = await state.get_data()
+    # TODO: add "Save application" button
     await message.answer(
         "Wonderful! Please review your application:\n\n" \
         f"<b>Your name: {data['name']}\n" \
@@ -235,7 +236,7 @@ async def app_final(message: Message, state: FSMContext) -> None:
         f"Budget, $: {data['budget']}\n" \
         f"Trip date: {data['start_date']}\n" \
         f"Trip duration, days: {data['duration']}</b>\n\n" \
-        "If everything is correct, please write additional comment in next message or press \"Skip\".",
+        "If everything is correct, please write additional comment in next message or press \"Save application\".",
     )
     await state.set_state(Application.final)
 
