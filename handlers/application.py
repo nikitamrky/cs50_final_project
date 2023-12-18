@@ -113,3 +113,11 @@ async def app_trip_date(message: Message, state: FSMContext) -> None:
     await state.update_data(budget=budget)
     await message.answer("Provide the approximate start date of your trip as DD/MM/YYYY.")
     await state.set_state(Application.date_choice)
+
+
+@router.message(StateFilter(Application.date_choice))
+async def app_trip_duration(message: Message, state: FSMContext) -> None:
+    """
+    Ask for trip duration
+    """
+    pass
