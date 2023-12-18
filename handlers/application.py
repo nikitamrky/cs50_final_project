@@ -144,8 +144,41 @@ async def app_trip_duration(message: Message, state: FSMContext) -> None:
             return
 
     # Save data and ask for trip duration
+    # TODO: add keyboard with suggestions and "Change budget" button
     await state.update_data(start_date=date_str)
-    await message.answer(f"Date is {date_str}")
+    await message.answer("Approximately ow many days do you want to travel?")
     await state.set_state(Application.duration_choice)
 
 
+@router.message(StateFilter(Application.duration_choice))
+async def app_name(message: Message, state: FSMContext) -> None:
+    """
+    Ask if name from Telegram is correct.
+    If not, ask user name.
+    """
+
+    # Repromt if no integer in message
+    try:
+        duration = int(message.text)
+    except:
+        await message.reply(
+            "Please provide an integer of days, e.g. \"10\".\n" \
+            "Or send \"/start\" command."
+        )
+        return
+
+    # Reprompt if duration is negative or more than 30 days:
+    if duration < 1 or duration > 30:
+        await message.reply(
+            "Sorry, we can only offer tours from 1 to 30 days." \
+            "Please change duration or send \"/start\" command."
+        )
+        return
+
+    # Save data and ask user's name
+    await state.update_data(duration=duration)
+    # TODO: get username
+    await message.answer(
+        f"Is your name Ababadaba? Please send \"yes\" or write correct name",
+    )
+    await state.set_state(Application.name)
