@@ -205,9 +205,9 @@ async def app_phone(message: Message, state: FSMContext) -> None:
     # Ask phone
     await message.answer(
         "Please enter your phone number, we will contact you during business hours.\n" \
-        "<i>e.g. \"(617) 555−1234\""
+        "<i>e.g. \"(617) 555−1234\"</i>"
     )
-    state.set_state(Application.phone)
+    await state.set_state(Application.phone)
 
 
 @router.message(StateFilter(Application.phone))
@@ -230,11 +230,20 @@ async def app_final(message: Message, state: FSMContext) -> None:
         "Wonderful! Please review your application:\n\n" \
         f"<b>Your name: {data['name']}\n" \
         f"Phone number: {data['phone']}\n" \
-        f"Trip to: {data['city']}" \
+        f"Trip to: {data['city']}\n" \
         f"Number of participants: {data['people_num']}\n" \
         f"Budget, $: {data['budget']}\n" \
-        f"Start date: {data['start_date']}\n" \
-        f"Approximate duration: {data['duration']}</b>\n\n" \
-        "If everything is correct, please write additional comment in this message or press \"Skip\"",
+        f"Trip date: {data['start_date']}\n" \
+        f"Trip duration, days: {data['duration']}</b>\n\n" \
+        "If everything is correct, please write additional comment in this message or press \"Skip\".",
     )
-    state.set_state(Application.final)
+    await state.set_state(Application.final)
+
+
+@router.message(StateFilter(Application.final))
+async def app_save(message: Message, state: FSMContext) -> None:
+    """
+    Confirm application and save in in database
+    """
+
+    pass
