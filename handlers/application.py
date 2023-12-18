@@ -23,13 +23,15 @@ async def start_points_handler(message: Message, state: FSMContext) -> None:
 
     # Ask number of people if cur_state == "Forecast.result"
     else:
+        # TODO: make a keyboard with options
         await message.answer("How many people will go on the tour?")
         await state.set_state(Application.people_num_choice)
 
 
 @router.message(StateFilter(Application.city_choice))
 async def app_city(message: Message, state: FSMContext) -> None:
-    await message.answer("How many people are going?")
+    # TODO: make a keyboard with options
+    await message.answer("How many people will go on the tour?")
     # TODO: fix error "set_data() got an unexpected keyword argument 'city'"
     await state.update_data(city=message.text)
     await state.set_state(Application.people_num_choice)
