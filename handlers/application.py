@@ -27,7 +27,8 @@ async def start_points_handler(message: Message, state: FSMContext) -> None:
         # TODO: make a keyboard with options
         await message.answer(
             "How many people will go on the tour?",
-            reply_markup=a.people_kb()
+            reply_markup=a.people_kb(),
+            input_field_placeholder="Select or send an integer"
         )
         await state.set_state(Application.people_num_choice)
 
@@ -37,7 +38,8 @@ async def app_city(message: Message, state: FSMContext) -> None:
     # TODO: make a keyboard with options
     await message.answer(
         "How many people will go on the tour?",
-        reply_markup=a.people_kb()
+        reply_markup=a.people_kb(),
+        input_field_placeholder="Select or send an integer"
     )
     await state.update_data(city=message.text)
     await state.set_state(Application.people_num_choice)
