@@ -177,8 +177,24 @@ async def app_name(message: Message, state: FSMContext) -> None:
 
     # Save data and ask user's name
     await state.update_data(duration=duration)
-    # TODO: get username
+    # TODO: get username from Bot API
     await message.answer(
         f"Is your name Ababadaba? Please send \"yes\" or write correct name",
     )
     await state.set_state(Application.name)
+
+
+@router.message(StateFilter(Application.name))
+async def app_phone(message: Message, state: FSMContext) -> None:
+    """
+    Save user's name and ask phone number.
+    """
+
+    # Save data if answer was "yes"
+    if message.text.lower == "yes":
+        # TODO: get username from Bot API
+        await state.update_data(name="Ababadaba")
+
+    # Save user's name from their answer
+    else:
+        pass
