@@ -2,7 +2,7 @@ import asyncio
 import re
 from aiogram.types import Message
 
-async def get_date(message: Message) -> re.Match:
+async def get_date(message: Message) -> str:
     """
     Find formatted date in string (DD.MM.YYYY).
     Repromt user if no date in string.
@@ -22,3 +22,23 @@ async def get_date(message: Message) -> re.Match:
 
     return match.group()
 
+
+async def get_phone(message: Message) -> str:
+    """
+    Find phone number in string (e.g. "(617)555−1234").
+    Reprompt user if no phone number in string.
+    """
+
+    # Search for string
+    phone_pattern = re.compile(r'(\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4})')
+    match = phone_pattern.search(message.text)
+
+    # Reprompt if no phone number in message
+    if not match:
+        await message.reply(
+            "There doesn't seem to be a valid phone number here." \
+            "Please enter phone number, e.g. \"(617)555−1234\", or send \"/start\" command."
+        )
+        return
+
+    return match.group()
