@@ -17,9 +17,12 @@ router = Router()
 router.include_routers(forecast.router, app.router)
 
 
-# "Start" command handler
 @router.message(CommandStart())
 async def cmd_start(message: Message, state: FSMContext) -> None:
+    """
+    Command "/start" handler
+    """
+
     await message.answer(
         "Hi! What do you want: get forecast or fill an application?",
         reply_markup=g.fcast_or_app_kb(),
@@ -28,9 +31,12 @@ async def cmd_start(message: Message, state: FSMContext) -> None:
     await state.clear()
 
 
-# Bacis catch all handler
 @router.message(TypeErrorFilter())
 async def catchall_default(message: Message) -> None:
+    """
+    Unsupported message type handler
+    """
+
     await message.answer(
         "Bot understands only when you press buttons on write relevant text."
     )
@@ -41,6 +47,9 @@ async def catchall_default(message: Message) -> None:
 
 @router.message(StateFilter(None), F.text.lower().contains("forecast"))
 async def start_weather(message: Message, state: FSMContext) -> None:
+    """
+    Ask city if user chose forecast
+    """
     await message.answer(
         "Provide city for checking forecast.\n"
         +"<i>e.g. \"Cambridge\"</i>",
@@ -63,4 +72,7 @@ async def start_application(message: Message, state: FSMContext) -> None:
 
 @router.message(StateFilter(None))
 async def catch_all(message: Message) -> None:
+    """
+        Catch all handler
+    """
     await message.answer("I don't understand you")
