@@ -255,3 +255,23 @@ async def app_save(message: Message, state: FSMContext) -> None:
         comment = message.text
 
     # Save application in database
+    data = await state.get_data()
+    result = await utils.save_app(data, comment)
+
+    # Inform user if error happened
+    if not result:
+        # TODO: add "Main menu" button
+        await message.answer(
+            "Something went wrong: we couldn't save your application." \
+            "Please fill another one later."
+        )
+        return
+
+    # Comfirm application saving
+    # TODO: add "Main menu" button
+    await message.answer(
+        "Thank you for contacting CS50 Tour!" \
+        "We have received your application and will get in touch shortly at the provided phone number.",
+        reply_markup=ReplyKeyboardRemove()
+    )
+    await state.clear()

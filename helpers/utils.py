@@ -3,6 +3,12 @@ import re
 from aiogram.types import Message
 import sqlite3
 
+
+# Connect to database in order to save user applications
+conn = sqlite3.connect('applications.db')
+db = conn.cursor()
+
+
 async def get_date(message: Message) -> str:
     """
     Find formatted date in string (DD.MM.YYYY).
@@ -45,9 +51,25 @@ async def get_phone(message: Message) -> str:
     return match.group()
 
 
-async def save_app(data: dict) -> bool:
+async def save_app(data: dict, comment: str) -> bool:
     """
     Save user application in database and return true if successful.
     """
+    try:
+        db.execute(
+            "INSERT INTO applications (name, phone, city, people, budget, start_date, duration, comment)" \
+            "VALUES (?, ?, ?, ?, ?, ?, ?)",
+            (
+                data['name'],
+                data['phone'],
+                data['city'],
+                data['people_num'],
+                data['budget'],
+                data['duration'],
+                comment
+            )
+        )
+    except:
+        return False
 
-    pass
+    return True
