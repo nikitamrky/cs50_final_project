@@ -78,7 +78,7 @@ async def app_budget(message: Message, state: FSMContext) -> None:
         return
 
     # Save data and ask budget
-    state.update_data(people_num=people_num)
+    await state.update_data(people_num=people_num)
     await message.answer(
         "What is the expected budget for the trip in US dollars? \n <i>e.g. \"1200\"</i>",
         reply_markup=ReplyKeyboardRemove()
@@ -112,6 +112,7 @@ async def app_trip_date(message: Message, state: FSMContext) -> None:
         )
         return
 
-    # Ask start date
+    # Save data and ask start date
+    await state.update_data(budget=budget)
     await message.answer("Provide the approximate start date of your trip as DD/MM/YYYY.")
     await state.set_state(Application.date_choice)
