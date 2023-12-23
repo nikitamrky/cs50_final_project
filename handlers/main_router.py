@@ -70,7 +70,7 @@ async def start_application(message: Message, state: FSMContext) -> None:
     await app.start_points_handler(message, state)
 
 
-@router.message(StateFilter(None), F.text.contains(a.main_menu_button_text))
+@router.message(F.text.contains(a.main_menu_button_text))
 async def main_menu(message: Message, state: FSMContext) -> None:
     """
         Navigate to main menu
