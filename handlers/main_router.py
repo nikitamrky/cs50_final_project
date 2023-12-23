@@ -26,7 +26,6 @@ async def cmd_start(message: Message, state: FSMContext) -> None:
     await message.answer(
         "Hi! What do you want: get forecast or fill application?",
         reply_markup=g.fcast_or_app_kb(),
-        input_field_placeholder="Select option"
     )
     await state.clear()
 
@@ -78,7 +77,6 @@ async def main_menu(message: Message, state: FSMContext) -> None:
     await message.answer(
         "What do you want: get forecast or fill application?",
         reply_markup=g.fcast_or_app_kb(),
-        input_field_placeholder="Select option"
     )
     await state.clear()
 

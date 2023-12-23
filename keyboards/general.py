@@ -15,4 +15,7 @@ def fcast_or_app_kb() -> ReplyKeyboardMarkup:
     kb.button(text="Forecast")
     kb.button(text="Application")
     kb.adjust(2)
-    return kb.as_markup(resize_keyboard=True)
+    return kb.as_markup(
+        resize_keyboard=True,
+        input_field_placeholder="Select option"
+    )
