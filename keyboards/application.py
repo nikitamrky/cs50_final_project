@@ -69,3 +69,8 @@ def save_app_kb() -> ReplyKeyboardMarkup:
     kb.button(text=main_menu_button_text)
     kb.adjust(1)
     return kb.as_markup(resize_keyboard=True)
+
+
+def final_kb() -> ReplyKeyboardMarkup:
+    kb.button(text=main_menu_button_text)
+    return kb.as_markup(resize_keyboard=True)

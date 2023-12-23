@@ -338,7 +338,8 @@ async def app_save(message: Message, state: FSMContext) -> None:
         # TODO: add "Main menu" button
         await message.answer(
             "Something went wrong: we couldn't save your application.\n" \
-            "Please fill another one later."
+            "Please fill another one later.",
+            reply_markup=a.final_kb()
         )
         return
 
@@ -347,6 +348,6 @@ async def app_save(message: Message, state: FSMContext) -> None:
     await message.answer(
         "<b>Thank you for contacting CS50 Tour!</b>\n" \
         "We have received your application and will get in touch shortly at the provided phone number.",
-        reply_markup=ReplyKeyboardRemove()
+        reply_markup=a.final_kb()
     )
     await state.clear()
