@@ -2,7 +2,7 @@ from aiogram import Router, F
 from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram.filters import StateFilter
 from aiogram.fsm.context import FSMContext
-from FSM import Forecast
+from FSM import Forecast, Application
 from keyboards import general as g, forecast as f
 from helpers import get_forecast
 import re
@@ -21,29 +21,40 @@ async def fcast_get_city(message: Message, state: FSMContext) -> None:
     """
     Get city for forecast
     """
-    if (len(message.text) > 1 and len(message.text) < 20):
 
-        # Extract cities from message
-        doc = NER(message.text)
-        cities = [ent.text for ent in doc.ents if ent.label_=="GPE"]
-        cities = [ent.text for ent in doc.ents if ent.label_=="GPE"]
-
-        if len(cities) > 1:
-            await message.reply("I can't multitask, sorry. I'll try to find a forecast for 1st city.")
-
-        if cities:
-            await state.update_data(city=cities[0])
-        else:
-            await state.update_data(city=message.text)
+    # Navigate to application flow
+    if message.text == "Fill application":
         await message.answer(
-            "Specify the date.\n"
-            + "<i>We can check forecast for tomorrow or 3 days ahead.</i>",
-            reply_markup=f.date_kb(),
+            "What city do you want to visit? \n<i>e.g. Istanbul</i>",
+            reply_markup=ReplyKeyboardRemove()
         )
-        await state.set_state(Forecast.date_choice)
+        await state.set_state(Application.city_choice)
+        return
 
-    else:
+    # Reprompt if string length is too short or long
+    if not (len(message.text) > 1 and len(message.text) < 20):
         await message.reply("It doesn't seem like a city name. Try again.")
+        return
+
+    # Extract cities from message
+    doc = NER(message.text)
+    cities = [ent.text for ent in doc.ents if ent.label_=="GPE"]
+    cities = [ent.text for ent in doc.ents if ent.label_=="GPE"]
+
+    if len(cities) > 1:
+        await message.reply("I can't multitask, sorry. I'll try to find a forecast for 1st city.")
+
+    if cities:
+        await state.update_data(city=cities[0])
+    else:
+        await state.update_data(city=message.text)
+    await message.answer(
+        "Specify the date.\n"
+        + "<i>We can check forecast for tomorrow or 3 days ahead.</i>",
+        reply_markup=f.date_kb(),
+    )
+    await state.set_state(Forecast.date_choice)
+
 
 @router.message(StateFilter(Forecast.date_choice))
 async def fcast_get_date(message: Message, state: FSMContext) -> None:

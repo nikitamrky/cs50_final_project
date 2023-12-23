@@ -6,7 +6,7 @@ from aiogram.fsm.context import FSMContext
 from FSM import Forecast, Application
 from handlers import forecast
 from handlers import application as app
-from handlers.type_error import TypeErrorFilter
+from helpers import utils as u
 from keyboards import general as g, application as a
 import spacy
 
@@ -30,7 +30,7 @@ async def cmd_start(message: Message, state: FSMContext) -> None:
     await state.clear()
 
 
-@router.message(TypeErrorFilter())
+@router.message(u.TypeErrorFilter())
 async def catchall_default(message: Message) -> None:
     """
     Unsupported message type handler
@@ -38,9 +38,6 @@ async def catchall_default(message: Message) -> None:
 
     await message.answer(
         "Bot understands only when you press buttons on write relevant text."
-    )
-    await message.answer(
-        "Please select forecast or application."
     )
 
 
@@ -86,4 +83,4 @@ async def catch_all(message: Message) -> None:
     """
         Catch all handler
     """
-    await message.answer("I don't understand you")
+    await message.answer("Please choose an option")

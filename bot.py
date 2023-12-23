@@ -7,6 +7,9 @@ from aiogram.fsm.storage.memory import MemoryStorage
 from handlers import main_router
 
 
+# Telegram bot link: https://t.me/cs50_tour_bot
+
+
 async def main():
 
     # Enable logging
