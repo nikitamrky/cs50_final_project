@@ -21,6 +21,7 @@ def budget_kb() -> ReplyKeyboardMarkup:
     kb = ReplyKeyboardBuilder()
     kb.button(text="Change number of people")
     kb.button(text=main_menu_button_text)
+    kb.adjust(1)
     return kb.as_markup(resize_keyboard=True)
 
 
@@ -28,6 +29,7 @@ def trip_date_kb() -> ReplyKeyboardMarkup:
     kb = ReplyKeyboardBuilder()
     kb.button(text="Change budget")
     kb.button(text=main_menu_button_text)
+    kb.adjust(1)
     return kb.as_markup(resize_keyboard=True)
 
 

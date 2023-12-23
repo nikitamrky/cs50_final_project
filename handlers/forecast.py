@@ -62,6 +62,12 @@ async def fcast_get_date(message: Message, state: FSMContext) -> None:
         await state.set_state(Forecast.city_choice)
         return
 
+    # Navigate to application flow
+    if "application" in message.text.lower():
+        await message.answer("What city do you want to visit? \n<i>e.g. Istanbul</i>")
+        await state.set_state(Application.city_choice)
+        return
+
     # Check if message has "tomorrow"
     if "tomorrow" in message.text.lower():
         date = datetime.now() + timedelta(days=1)
@@ -126,6 +132,6 @@ async def fcast_continue(message: Message, state: FSMContext) -> None:
     """
     await message.answer(
         "OK, write another city and we will check again!",
-        reply_markup=ReplyKeyboardRemove()
+        reply_markup=f.new_city_kb()
     )
     await state.set_state(Forecast.city_choice)

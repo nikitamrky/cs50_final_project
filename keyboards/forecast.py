@@ -10,3 +10,7 @@ def date_kb() -> ReplyKeyboardMarkup:
     return kb.as_markup(resize_keyboard=True)
 
 
+def new_city_kb() -> ReplyKeyboardMarkup:
+    kb = ReplyKeyboardBuilder()
+    kb.button(text="Fill application")
+    return kb.as_markup(resize_keyboard=True)
