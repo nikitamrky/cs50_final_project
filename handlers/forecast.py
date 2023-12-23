@@ -91,6 +91,9 @@ async def fcast_get_date(message: Message, state: FSMContext) -> None:
             await message.reply("Date must be in 4 days range starting tomorrow.")
             return
 
+    # Inform user that we are getting forecast ready
+    await message.answer("One moment...")
+
     # Provide forecast if date is correct
     if date:
         user_data = await state.get_data()

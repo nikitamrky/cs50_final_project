@@ -21,7 +21,10 @@ async def start_points_handler(message: Message, state: FSMContext) -> None:
 
     # If user got here after /start command
     if cur_state == None:
-        await message.answer("What city do you want to visit? \n<i>e.g. Istanbul</i>")
+        await message.answer(
+            "What city do you want to visit? \n<i>e.g. Istanbul</i>",
+            reply_markup=ReplyKeyboardRemove()
+        )
         await state.set_state(Application.city_choice)
 
     # Ask number of people if cur_state == "Forecast.result"
@@ -102,8 +105,10 @@ async def app_trip_date(message: Message, state: FSMContext) -> None:
         await state.set_state(Application.people_num_choice)
         return
 
-    # Delete spaces if any
+    # Delete spaces and commas/dots if any
     s = message.text.replace(" ", "")
+    s = message.text.replace(".", "")
+    s = message.text.replace(",", "")
 
     # Repropmt if answer is no integer
     try:
@@ -243,7 +248,7 @@ async def app_phone(message: Message, state: FSMContext) -> None:
 
     # Udpate name if answer was not "yes"
     if not message.text.lower == "yes":
-        await state.update_data(name=message.text.capitalize())
+        await state.update_data(name=message.text)
 
     # Ask phone
     await message.answer(
@@ -308,7 +313,7 @@ async def app_save(message: Message, state: FSMContext) -> None:
             "<i>e.g. \"617 555−1234\"</i>",
             reply_markup=ReplyKeyboardRemove()
         )
-        await state.set_state(Application.name)
+        await state.set_state(Application.phone)
         return
 
     # Start application from scratch
@@ -316,7 +321,7 @@ async def app_save(message: Message, state: FSMContext) -> None:
         await state.clear()
         await state.set_state(Application.city_choice)
         await message.answer(
-            await message.answer("What city do you want to visit?"),
+            "What city do you want to visit?",
             reply_markup=ReplyKeyboardRemove()
         )
         return
@@ -335,7 +340,6 @@ async def app_save(message: Message, state: FSMContext) -> None:
 
     # Inform user if error happened
     if not result:
-        # TODO: add "Main menu" button
         await message.answer(
             "Something went wrong: we couldn't save your application.\n" \
             "Please fill another one later.",
@@ -344,7 +348,6 @@ async def app_save(message: Message, state: FSMContext) -> None:
         return
 
     # Comfirm application saving
-    # TODO: add "Main menu" button
     await message.answer(
         "<b>Thank you for contacting CS50 Tour!</b>\n" \
         "We have received your application and will get in touch shortly at the provided phone number.",
