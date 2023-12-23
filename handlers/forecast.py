@@ -39,7 +39,6 @@ async def fcast_get_city(message: Message, state: FSMContext) -> None:
             "Specify the date.\n"
             + "<i>We can check forecast for tomorrow or 3 days ahead.</i>",
             reply_markup=f.date_kb(),
-            input_field_placeholder="DD.MM.YYYY"
         )
         await state.set_state(Forecast.date_choice)
 

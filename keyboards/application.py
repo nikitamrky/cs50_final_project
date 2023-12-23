@@ -14,7 +14,10 @@ def people_kb() -> ReplyKeyboardMarkup:
     kb.button(text="6")
     kb.button(text="Change city")
     kb.adjust(3)
-    return kb.as_markup(resize_keyboard=True)
+    return kb.as_markup(
+        resize_keyboard=True,
+        input_field_placeholder="Select or send an integer"
+    )
 
 
 def budget_kb() -> ReplyKeyboardMarkup:
@@ -22,7 +25,10 @@ def budget_kb() -> ReplyKeyboardMarkup:
     kb.button(text="Change number of people")
     kb.button(text=main_menu_button_text)
     kb.adjust(1)
-    return kb.as_markup(resize_keyboard=True)
+    return kb.as_markup(
+        resize_keyboard=True,
+        input_field_placeholder="Enter approximate budget"
+    )
 
 
 def trip_date_kb() -> ReplyKeyboardMarkup:
@@ -30,7 +36,10 @@ def trip_date_kb() -> ReplyKeyboardMarkup:
     kb.button(text="Change budget")
     kb.button(text=main_menu_button_text)
     kb.adjust(1)
-    return kb.as_markup(resize_keyboard=True)
+    return kb.as_markup(
+        resize_keyboard=True,
+        input_field_placeholder="Enter start date"
+    )
 
 
 def trip_duration_kb() -> ReplyKeyboardMarkup:
@@ -44,7 +53,10 @@ def trip_duration_kb() -> ReplyKeyboardMarkup:
     kb.button(text="Change start date")
     kb.button(text=main_menu_button_text)
     kb.adjust(3,3,1,1)
-    return kb.as_markup(resize_keyboard=True)
+    return kb.as_markup(
+        resize_keyboard=True,
+        input_field_placeholder="Enter trip duration in days"
+    )
 
 
 def username_kb() -> ReplyKeyboardMarkup:
@@ -61,7 +73,10 @@ def phone_kb() -> ReplyKeyboardMarkup:
     kb.button(text="Change my name")
     kb.button(text=main_menu_button_text)
     kb.adjust(1)
-    return kb.as_markup(resize_keyboard=True)
+    return kb.as_markup(
+        resize_keyboard=True,
+        input_field_placeholder="Enter phone number"
+    )
 
 
 def save_app_kb() -> ReplyKeyboardMarkup:

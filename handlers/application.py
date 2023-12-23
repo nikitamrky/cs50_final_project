@@ -31,8 +31,7 @@ async def start_points_handler(message: Message, state: FSMContext) -> None:
     else:
         await message.answer(
             "How many people will go on the tour?",
-            reply_markup=a.people_kb(),
-            input_field_placeholder="Select or send an integer"
+            reply_markup=a.people_kb()
         )
         await state.set_state(Application.people_num_choice)
 
@@ -45,8 +44,7 @@ async def app_people(message: Message, state: FSMContext) -> None:
 
     await message.answer(
         "How many people will go on the tour?",
-        reply_markup=a.people_kb(),
-        input_field_placeholder="Select or send an integer"
+        reply_markup=a.people_kb()
     )
     await state.update_data(city=message.text)
     await state.set_state(Application.people_num_choice)
@@ -83,8 +81,7 @@ async def app_budget(message: Message, state: FSMContext) -> None:
     await state.update_data(people_num=people_num)
     await message.answer(
         "What is the expected budget for the trip in US dollars? \n <i>e.g. \"1200\"</i>",
-        reply_markup=a.budget_kb(),
-        input_field_placeholder="Enter approximate budget"
+        reply_markup=a.budget_kb()
     )
     await state.set_state(Application.budget_choice)
 
@@ -100,7 +97,6 @@ async def app_trip_date(message: Message, state: FSMContext) -> None:
         await message.answer(
             "How many people will go on the tour?",
             reply_markup=a.people_kb(),
-            input_field_placeholder="Select or send an integer"
         )
         await state.set_state(Application.people_num_choice)
         return
@@ -130,8 +126,7 @@ async def app_trip_date(message: Message, state: FSMContext) -> None:
     await state.update_data(budget=budget)
     await message.answer(
         "Provide the approximate start date of your trip as DD/MM/YYYY.",
-        reply_markup=a.trip_date_kb(),
-        input_field_placeholder="Enter start date"
+        reply_markup=a.trip_date_kb()
     )
     await state.set_state(Application.date_choice)
 
@@ -176,8 +171,7 @@ async def app_trip_duration(message: Message, state: FSMContext) -> None:
     await state.update_data(start_date=date_str)
     await message.answer(
         "Approximately how many days do you want to travel?",
-        reply_markup=a.trip_duration_kb(),
-        input_field_placeholder="Enter trip duration in days"
+        reply_markup=a.trip_duration_kb()
     )
     await state.set_state(Application.duration_choice)
 
@@ -254,8 +248,7 @@ async def app_phone(message: Message, state: FSMContext) -> None:
     await message.answer(
         "Please enter your phone number, we will contact you during business hours.\n" \
         "<i>e.g. \"617 555−1234\"</i>",
-        reply_markup=a.phone_kb(),
-        input_field_placeholder="Enter phone number"
+        reply_markup=a.phone_kb()
     )
     await state.set_state(Application.phone)
 
