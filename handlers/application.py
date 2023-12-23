@@ -4,10 +4,22 @@ from aiogram.filters import StateFilter
 from aiogram.fsm.context import FSMContext
 from FSM import Forecast, Application
 from keyboards import application as a
+from keyboards import general as g
 from helpers import utils
 from datetime import datetime
 
 router = Router()
+
+
+# Navigation to main menu
+async def back_to_main_menu(message: Message, state: FSMContext) -> None:
+    await message.answer(
+        "What do you want: get forecast or fill application?",
+        reply_markup=g.fcast_or_app_kb(),
+        input_field_placeholder="Select option"
+    )
+    await state.clear()
+    return
 
 
 async def start_points_handler(message: Message, state: FSMContext) -> None:
@@ -34,9 +46,9 @@ async def start_points_handler(message: Message, state: FSMContext) -> None:
 
 
 @router.message(StateFilter(Application.city_choice))
-async def app_city(message: Message, state: FSMContext) -> None:
+async def app_people(message: Message, state: FSMContext) -> None:
     """
-    Ask city
+    Ask how many people go on tour
     """
 
     await message.answer(
@@ -76,11 +88,11 @@ async def app_budget(message: Message, state: FSMContext) -> None:
         return
 
     # Save data and ask budget
-    # TODO: add button for changing number of people
     await state.update_data(people_num=people_num)
     await message.answer(
         "What is the expected budget for the trip in US dollars? \n <i>e.g. \"1200\"</i>",
-        reply_markup=ReplyKeyboardRemove()
+        reply_markup=a.budget_kb(),
+        input_field_placeholder="Enter approximate budget"
     )
     await state.set_state(Application.budget_choice)
 
@@ -90,6 +102,21 @@ async def app_trip_date(message: Message, state: FSMContext) -> None:
     """
     Ask trip date
     """
+
+    # Navigate to main menu
+    if message.text == a.main_menu_button_text:
+        await back_to_main_menu(message, state)
+        return
+
+    # Navigate to previous state
+    if message.text == "Change number of people":
+        await message.answer(
+            "How many people will go on the tour?",
+            reply_markup=a.people_kb(),
+            input_field_placeholder="Select or send an integer"
+        )
+        await state.set_state(Application.people_num_choice)
+        return
 
     # Delete spaces if any
     s = message.text.replace(" ", "")
@@ -113,7 +140,11 @@ async def app_trip_date(message: Message, state: FSMContext) -> None:
     # Save data and ask start date
     # TODO: add button for changing budget
     await state.update_data(budget=budget)
-    await message.answer("Provide the approximate start date of your trip as DD/MM/YYYY.")
+    await message.answer(
+        "Provide the approximate start date of your trip as DD/MM/YYYY.",
+        reply_markup=a.trip_date_kb(),
+        input_field_placeholder="Enter start date"
+    )
     await state.set_state(Application.date_choice)
 
 
@@ -123,7 +154,12 @@ async def app_trip_duration(message: Message, state: FSMContext) -> None:
     Ask for trip duration
     """
 
-    # Reprompt if user wants to change budget
+    # Navigate to main menu
+    if message.text == a.main_menu_button_text:
+        await back_to_main_menu(message, state)
+        return
+
+    # Navigate to previous state
     if message.text == "Change budget":
         await message.answer("What is the expected budget for the trip in US dollars? \n<i>e.g. \"1200\"</i>")
         await state.set_state(Application.budget_choice)

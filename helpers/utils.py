@@ -16,7 +16,7 @@ async def get_date(message: Message) -> str:
     """
 
     # Search for date
-    date_pattern = re.compile(r'\b\d{1,2}\.\d{1,2}\.\d{4}\b')
+    date_pattern = re.compile(r'\b\d{1,2}[./]\d{1,2}[./]\d{4}\b')
     match = date_pattern.search(message.text)
 
     # Reprompt if no date in message
