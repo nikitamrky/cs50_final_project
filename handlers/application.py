@@ -4,22 +4,11 @@ from aiogram.filters import StateFilter
 from aiogram.fsm.context import FSMContext
 from FSM import Forecast, Application
 from keyboards import application as a
-from keyboards import general as g
 from helpers import utils
 from datetime import datetime
 
+
 router = Router()
-
-
-# Navigation to main menu
-async def back_to_main_menu(message: Message, state: FSMContext) -> None:
-    await message.answer(
-        "What do you want: get forecast or fill application?",
-        reply_markup=g.fcast_or_app_kb(),
-        input_field_placeholder="Select option"
-    )
-    await state.clear()
-    return
 
 
 async def start_points_handler(message: Message, state: FSMContext) -> None:
@@ -103,11 +92,6 @@ async def app_trip_date(message: Message, state: FSMContext) -> None:
     Ask trip date
     """
 
-    # Navigate to main menu
-    if message.text == a.main_menu_button_text:
-        await back_to_main_menu(message, state)
-        return
-
     # Navigate to previous state
     if message.text == "Change number of people":
         await message.answer(
@@ -152,11 +136,6 @@ async def app_trip_duration(message: Message, state: FSMContext) -> None:
     """
     Ask for trip duration
     """
-
-    # Navigate to main menu
-    if message.text == a.main_menu_button_text:
-        await back_to_main_menu(message, state)
-        return
 
     # Navigate to previous state
     if message.text == "Change budget":
@@ -343,7 +322,7 @@ async def app_save(message: Message, state: FSMContext) -> None:
         return
 
     # Save "-" in comment variable if user didn't provide comment
-    if message.text.lower() == "skip" or message.text == "Send application":
+    if message.text == "Send application":
         comment = "-"
 
     # Or save comment

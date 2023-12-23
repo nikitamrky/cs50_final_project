@@ -7,7 +7,7 @@ from FSM import Forecast, Application
 from handlers import forecast
 from handlers import application as app
 from handlers.type_error import TypeErrorFilter
-from keyboards import general as g
+from keyboards import general as g, application as a
 import spacy
 
 
@@ -68,6 +68,19 @@ async def start_application(message: Message, state: FSMContext) -> None:
     """
     # Stored into handlers/application.py
     await app.start_points_handler(message, state)
+
+
+@router.message(StateFilter(None), F.text.contains(a.main_menu_button_text))
+async def main_menu(message: Message, state: FSMContext) -> None:
+    """
+        Navigate to main menu
+    """
+    await message.answer(
+        "What do you want: get forecast or fill application?",
+        reply_markup=g.fcast_or_app_kb(),
+        input_field_placeholder="Select option"
+    )
+    await state.clear()
 
 
 @router.message(StateFilter(None))
