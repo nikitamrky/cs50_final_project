@@ -175,14 +175,19 @@ async def app_name(message: Message, state: FSMContext) -> None:
         )
         return
 
-    # Save data and ask user's name
+    # Save data
     await state.update_data(duration=duration)
-    # TODO: get username from Bot API
+
+    # Get user name and ask if it is correct
+    name = message.from_user.full_name
+    await state.update_data(name=name)
     # TODO: add keyboard with "Change duration" and "Main menu" buttons
     await message.answer(
-        f"Is your name Ababadaba? Please send \"yes\" or write correct name",
+        f"Is your name {name}?\n" \
+        f"Please send \"yes\" or write correct name",
     )
     await state.set_state(Application.name)
+
 
 
 @router.message(StateFilter(Application.name))
@@ -191,16 +196,9 @@ async def app_phone(message: Message, state: FSMContext) -> None:
     Save user's name and ask phone number.
     """
 
-    # Save data if answer was "yes"
-    if message.text.lower == "yes":
-        # TODO: get username from Bot API
-        await state.update_data(name="Ababadaba")
-
-    # Save user's name from their answer
-    else:
-        # TODO: reprompt if user input is numeric or smth
-        name = message.text.capitalize()
-        await state.update_data(name=name)
+    # Udpate name if answer was not "yes"
+    if not message.text.lower == "yes":
+        await state.update_data(name=message.text.capitalize())
 
     # Ask phone
     await message.answer(
