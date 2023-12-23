@@ -3,14 +3,12 @@ from datetime import datetime
 from os import getenv
 import json
 
-# TODO: document functions
 
 async def get(city: str, date: datetime) -> str:
     """
     Request data from weather API and return forecast string
     """
-    # TODO: implement forecast for specific date
-    d = date.strftime('%d.%m.%Y')
+
     API_KEY = getenv("WEATHER_API_KEY")
     url = "https://api.openweathermap.org/data/2.5/forecast?lang=eng&units=metric" \
          "&q=%s" \
@@ -28,7 +26,7 @@ async def get(city: str, date: datetime) -> str:
 
 def fcast_format(data: json, date: datetime) -> str:
     """
-    Format forecast data to string
+    Format forecast data piece from json to string
     """
     fcast_data = []
     date_str = date.strftime('%Y-%m-%d')
@@ -42,38 +40,37 @@ def fcast_format(data: json, date: datetime) -> str:
     s = "Temperature: %s°C\n" \
         "%s\n" \
         "Wind speed: %s m/s" % (temp, descr, wind_speed)
-
     return s
-
-# "cod":"200","message":0,"cnt":40,"list":[
-#                                         {"dt":1701885600,
-#                                               "main":
-#                                                                 {"temp":-9.52,
-#                                                                  "feels_like":-9.52,
-#                                                                  "temp_min":-21.97,
-#                                                                  "temp_max":-9.52,
-#                                                                  "pressure":1036,
-#                                                                  "sea_level":1036,
-#                                                                  "grnd_level":1016,
-#                                                                  "humidity":100,
-#                                                                  "temp_kf":12.45
-#                                                                  },
-#                                          "weather":[
-#                                              {"id":803,
-#                                               "main":"Clouds",
-#                                               "description":"broken clouds",
-#                                               "icon":"04n"}
-#                                          ],
-#                                          "clouds":{
-#                                               "all":80
-#                                          },
-#                                          "wind":{
-#                                               "speed":0.7,
-#                                               "deg":93,
-#                                               "gust":0.71
-#                                          },
-#                                          "visibility":3534,
-#                                          "pop":0,
-#                                          "sys":{"pod":"n"},
-#                                          "dt_txt":"2023-12-06 21:00:00"
-#                                          }
+    # Data example
+        # "cod":"200","message":0,"cnt":40,"list":[
+        #                                         {"dt":1701885600,
+        #                                               "main":
+        #                                                                 {"temp":-9.52,
+        #                                                                  "feels_like":-9.52,
+        #                                                                  "temp_min":-21.97,
+        #                                                                  "temp_max":-9.52,
+        #                                                                  "pressure":1036,
+        #                                                                  "sea_level":1036,
+        #                                                                  "grnd_level":1016,
+        #                                                                  "humidity":100,
+        #                                                                  "temp_kf":12.45
+        #                                                                  },
+        #                                          "weather":[
+        #                                              {"id":803,
+        #                                               "main":"Clouds",
+        #                                               "description":"broken clouds",
+        #                                               "icon":"04n"}
+        #                                          ],
+        #                                          "clouds":{
+        #                                               "all":80
+        #                                          },
+        #                                          "wind":{
+        #                                               "speed":0.7,
+        #                                               "deg":93,
+        #                                               "gust":0.71
+        #                                          },
+        #                                          "visibility":3534,
+        #                                          "pop":0,
+        #                                          "sys":{"pod":"n"},
+        #                                          "dt_txt":"2023-12-06 21:00:00"
+        #                                          }

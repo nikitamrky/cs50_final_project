@@ -8,6 +8,9 @@ from aiogram import F
 
 # Filter all types of messages but regular text
 class TypeErrorFilter(Filter):
+    """
+    Filter for non-text message types
+    """
     async def __call__(self, message: Message) -> bool:
         types = [
             "audio",
