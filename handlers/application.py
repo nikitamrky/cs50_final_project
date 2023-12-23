@@ -161,7 +161,10 @@ async def app_trip_duration(message: Message, state: FSMContext) -> None:
 
     # Navigate to previous state
     if message.text == "Change budget":
-        await message.answer("What is the expected budget for the trip in US dollars? \n<i>e.g. \"1200\"</i>")
+        await message.answer(
+            "What is the expected budget for the trip in US dollars? \n<i>e.g. \"1200\"</i>",
+            reply_markup=ReplyKeyboardRemove()
+        )
         await state.set_state(Application.budget_choice)
         return
 
@@ -172,7 +175,14 @@ async def app_trip_duration(message: Message, state: FSMContext) -> None:
 
     # Reprompt if date has passed
     else:
-        date = datetime.strptime(date_str, "%d.%m.%Y")
+        try:
+            date = datetime.strptime(date_str, "%d.%m.%Y")
+        except:
+            try:
+                date = datetime.strptime(date_str, "%d/%m/%Y")
+            except:
+                await message.answer("Coundn't parse date from your message. Please enter it again.")
+                return
         cur_date = datetime.now()
         td = date - cur_date
         if td.days < 0:
@@ -180,7 +190,6 @@ async def app_trip_duration(message: Message, state: FSMContext) -> None:
             return
 
     # Save data and ask for trip duration
-    # TODO: add keyboard with suggestions and "Change budget" and "Main menu" buttons
     await state.update_data(start_date=date_str)
     await message.answer("Approximately how many days do you want to travel?")
     await state.set_state(Application.duration_choice)
