@@ -138,7 +138,6 @@ async def app_trip_date(message: Message, state: FSMContext) -> None:
         return
 
     # Save data and ask start date
-    # TODO: add button for changing budget
     await state.update_data(budget=budget)
     await message.answer(
         "Provide the approximate start date of your trip as DD/MM/YYYY.",
@@ -191,7 +190,11 @@ async def app_trip_duration(message: Message, state: FSMContext) -> None:
 
     # Save data and ask for trip duration
     await state.update_data(start_date=date_str)
-    await message.answer("Approximately how many days do you want to travel?")
+    await message.answer(
+        "Approximately how many days do you want to travel?",
+        reply_markup=a.trip_duration_kb(),
+        input_field_placeholder="Enter trip duration in days"
+    )
     await state.set_state(Application.duration_choice)
 
 

@@ -33,5 +33,13 @@ def trip_date_kb() -> ReplyKeyboardMarkup:
     return kb.as_markup(resize_keyboard=True)
 
 
-def sdfds_kb() -> ReplyKeyboardMarkup:
-    pass
+def trip_duration_kb() -> ReplyKeyboardMarkup:
+    kb = ReplyKeyboardBuilder()
+    kb.button(text="2")
+    kb.button(text="5")
+    kb.button(text="10")
+    kb.button(text="14")
+    kb.button(text="2")
+    kb.button(text="2")
+    kb.adjust(2)
+    return kb.as_markup(resize_keyboard=True)
