@@ -205,6 +205,15 @@ async def app_name(message: Message, state: FSMContext) -> None:
     If not, ask user name.
     """
 
+    # Navigate to previous state
+    if message.text == "Change start date":
+        await message.answer(
+            "Provide the approximate start date of your trip as DD/MM/YYYY.",
+            reply_markup=ReplyKeyboardRemove()
+        )
+        await state.set_state(Application.date_choice)
+        return
+
     # Repromt if no integer in message
     try:
         duration = int(message.text)
@@ -233,6 +242,7 @@ async def app_name(message: Message, state: FSMContext) -> None:
     await message.answer(
         f"Is your name {name}?\n" \
         f"Please send \"yes\" or write correct name",
+        reply_markup=a.username_kb()
     )
     await state.set_state(Application.name)
 
@@ -243,6 +253,15 @@ async def app_phone(message: Message, state: FSMContext) -> None:
     """
     Save user's name and ask phone number.
     """
+
+    # Navigate to previous state
+    if message.text == "Change trip duration":
+        await message.answer(
+            "Approximately how many days do you want to travel?",
+            reply_markup=ReplyKeyboardRemove()
+        )
+        await state.set_state(Application.duration_choice)
+        return
 
     # Udpate name if answer was not "yes"
     if not message.text.lower == "yes":
