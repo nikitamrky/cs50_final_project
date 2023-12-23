@@ -46,8 +46,26 @@ def trip_duration_kb() -> ReplyKeyboardMarkup:
     kb.adjust(3,3,1,1)
     return kb.as_markup(resize_keyboard=True)
 
+
 def username_kb() -> ReplyKeyboardMarkup:
+    kb.button(text="Yes")
     kb.button(text="Change trip duration")
+    kb.button(text=main_menu_button_text)
+    kb.adjust(1)
+    return kb.as_markup(resize_keyboard=True)
+
+
+def phone_kb() -> ReplyKeyboardMarkup:
+    kb.button(text="Change my name")
+    kb.button(text=main_menu_button_text)
+    kb.adjust(1)
+    return kb.as_markup(resize_keyboard=True)
+
+
+def save_app_kb() -> ReplyKeyboardMarkup:
+    kb.button(text="Send application")
+    kb.button(text="Change phone number")
+    kb.button(text="Start from scratch")
     kb.button(text=main_menu_button_text)
     kb.adjust(1)
     return kb.as_markup(resize_keyboard=True)

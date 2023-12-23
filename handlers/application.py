@@ -238,7 +238,6 @@ async def app_name(message: Message, state: FSMContext) -> None:
     # Get user name and ask if it is correct
     name = message.from_user.full_name
     await state.update_data(name=name)
-    # TODO: add keyboard with "Change duration" and "Main menu" buttons
     await message.answer(
         f"Is your name {name}?\n" \
         f"Please send \"yes\" or write correct name",
@@ -270,7 +269,9 @@ async def app_phone(message: Message, state: FSMContext) -> None:
     # Ask phone
     await message.answer(
         "Please enter your phone number, we will contact you during business hours.\n" \
-        "<i>e.g. \"(617) 555−1234\"</i>"
+        "<i>e.g. \"617 555−1234\"</i>",
+        reply_markup=a.phone_kb(),
+        input_field_placeholder="Enter phone number"
     )
     await state.set_state(Application.phone)
 
@@ -280,6 +281,15 @@ async def app_final(message: Message, state: FSMContext) -> None:
     """
     Save phone number and ask for confirmation or additional comment.
     """
+
+    # Navigate to previous state
+    if message.text == "Change my name":
+        await message.answer(
+            "Please write your name",
+            reply_markup=ReplyKeyboardRemove()
+        )
+        await state.set_state(Application.name)
+        return
 
     # Return if there is no valid phone number
     phone = await utils.get_phone(message)
@@ -291,7 +301,6 @@ async def app_final(message: Message, state: FSMContext) -> None:
 
     # Ask confirmation or additional comment
     data = await state.get_data()
-    # TODO: add "Save application" button
     await message.answer(
         "Wonderful! Please review your application:\n\n" \
         f"<b>Your name: {data['name']}\n" \
@@ -301,7 +310,8 @@ async def app_final(message: Message, state: FSMContext) -> None:
         f"Budget, $: {data['budget']}\n" \
         f"Trip date: {data['start_date']}\n" \
         f"Trip duration, days: {data['duration']}</b>\n\n" \
-        "If everything is correct, please write additional comment in next message or press \"Save application\".",
+        "If everything is correct, please write additional comment in next message or press \"Send application\".",
+        reply_markup=a.save_app_kb()
     )
     await state.set_state(Application.final)
 
@@ -312,11 +322,31 @@ async def app_save(message: Message, state: FSMContext) -> None:
     Confirm application and save in in database
     """
 
+    # Navigate to previous state
+    if message.text == "Change phone number":
+        await message.answer(
+            "Please enter your phone number.\n" \
+            "<i>e.g. \"617 555−1234\"</i>",
+            reply_markup=ReplyKeyboardRemove()
+        )
+        await state.set_state(Application.name)
+        return
+
+    # Start application from scratch
+    if message.text == "Start from scratch":
+        await state.clear()
+        await state.set_state(Application.city_choice)
+        await message.answer(
+            await message.answer("What city do you want to visit?"),
+            reply_markup=ReplyKeyboardRemove()
+        )
+        return
+
     # Save "-" in comment variable if user didn't provide comment
-    if message.text.lower() == "skip":
+    if message.text.lower() == "skip" or message.text == "Send application":
         comment = "-"
 
-    # Or case comment
+    # Or save comment
     else:
         comment = message.text
 
