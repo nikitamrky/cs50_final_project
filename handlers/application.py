@@ -247,7 +247,7 @@ async def app_phone(message: Message, state: FSMContext) -> None:
         return
 
     # Udpate name if answer was not "yes"
-    if not message.text.lower == "yes":
+    if not message.text.lower() == "yes":
         await state.update_data(name=message.text)
 
     # Ask phone

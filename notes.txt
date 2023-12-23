@@ -11,3 +11,4 @@
 
 8. Переместить TypeErrorFilter в helpers/utils
 9. Переместить back to main menu в main router как хендлер
+10. Плейсхолдеры не работают!

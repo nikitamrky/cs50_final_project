@@ -37,7 +37,7 @@ async def get_phone(message: Message) -> str:
     """
 
     # Search for string
-    phone_pattern = re.compile(r'(\(?\d{3}\)?[-\-.\s]?(\d{1}[-\-.\s]?){7})')
+    phone_pattern = re.compile(r'\(?\d{3}\)?[−\-_.\s]?(\d{1}[−\-_.\s]?){7}')
     match = phone_pattern.search(message.text)
 
     # Reprompt if no phone number in message
