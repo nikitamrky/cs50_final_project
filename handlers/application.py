@@ -329,7 +329,7 @@ async def app_save(message: Message, state: FSMContext) -> None:
 
     # Save application in database
     data = await state.get_data()
-    result = await utils.save_app(data, comment)
+    result = utils.save_app(data, comment)
 
     # Inform user if error happened
     if not result:
