@@ -79,7 +79,7 @@ conn = sqlite3.connect('applications.db')
 db = conn.cursor()
 
 
-async def save_app(data: dict, comment: str) -> bool:
+def save_app(data: dict, comment: str) -> bool:
     """
     Save user application in database and return true if successful.
     """
