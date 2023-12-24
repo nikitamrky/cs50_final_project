@@ -247,7 +247,7 @@ async def app_phone(message: Message, state: FSMContext) -> None:
     # Ask phone
     await message.answer(
         "Please enter your phone number, we will contact you during business hours.\n" \
-        "<i>e.g. \"617 555−1234\"</i>",
+        "<i>e.g. \"617 555 1234\"</i>",
         reply_markup=a.phone_kb()
     )
     await state.set_state(Application.phone)
@@ -303,7 +303,7 @@ async def app_save(message: Message, state: FSMContext) -> None:
     if message.text == "Change phone number":
         await message.answer(
             "Please enter your phone number.\n" \
-            "<i>e.g. \"617 555−1234\"</i>",
+            "<i>e.g. \"617 555 1234\"</i>",
             reply_markup=ReplyKeyboardRemove()
         )
         await state.set_state(Application.phone)

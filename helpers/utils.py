@@ -74,31 +74,34 @@ async def get_phone(message: Message) -> str:
     return match.group()
 
 
-# Connect to database in order to save user applications
-conn = sqlite3.connect('applications.db')
-db = conn.cursor()
-
-
 def save_app(data: dict, comment: str) -> bool:
     """
     Save user application in database and return true if successful.
     """
+
+    # Connect to database in order to save user applications
+    conn = sqlite3.connect('applications.db')
+    db = conn.cursor()
+
     try:
         db.execute(
-            "INSERT INTO applications (name, phone, city, people, budget, start_date, duration, comment)" \
+            "INSERT INTO applications (name, phone, city, people, budget, start_date, duration, comment) " \
             "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
             (
                 data['name'],
                 data['phone'],
                 data['city'],
-                data['people_num'],
-                data['budget'],
+                int(data['people_num']),
+                int(data['budget']),
                 data['start_date'],
-                data['duration'],
+                int(data['duration']),
                 comment
             )
         )
+        conn.commit()
     except:
+        conn.close()
         return False
 
+    conn.close()
     return True
