@@ -9,9 +9,7 @@ from aiogram import F
 
 # Filter all types of messages but regular text
 class TypeErrorFilter(Filter):
-    """
-    Filter for non-text message types
-    """
+    """Filter for non-text message types"""
     async def __call__(self, message: Message) -> bool:
         types = [
             "audio",
@@ -34,11 +32,9 @@ class TypeErrorFilter(Filter):
 
 
 async def get_date(message: Message) -> str:
-    """
-    Find formatted date in string (DD.MM.YYYY).
+    """Find formatted date in string (DD.MM.YYYY).
     Repromt user if no date in string.
     """
-
     # Search for date
     date_pattern = re.compile(r'\b\d{1,2}[./]\d{1,2}[./]\d{4}\b')
     match = date_pattern.search(message.text)
@@ -55,11 +51,9 @@ async def get_date(message: Message) -> str:
 
 
 async def get_phone(message: Message) -> str:
-    """
-    Find phone number in string (e.g. "(617)555−1234").
+    """Find phone number in string (e.g. "(617)555−1234").
     Reprompt user if no phone number in string.
     """
-
     # Search for string
     phone_pattern = re.compile(r'\(?\d{3}\)?[−\-_.\s]?(\d{1}[−\-_.\s]?){7}')
     match = phone_pattern.search(message.text)
@@ -76,14 +70,13 @@ async def get_phone(message: Message) -> str:
 
 
 def save_app(data: dict, comment: str) -> bool:
-    """
-    Save user application in database and return true if successful.
-    """
+    """Save user application in database and return true if successful."""
 
     # Connect to database in order to save user applications
     conn = sqlite3.connect('applications.db')
     db = conn.cursor()
 
+    # Send application to database
     try:
         db.execute(
             "INSERT INTO applications (name, phone, city, people, budget, start_date, duration, comment) " \
