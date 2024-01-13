@@ -15,8 +15,7 @@ router = Router()
 
 
 async def start_points_handler(message: Message, state: FSMContext) -> None:
-    """
-    Handle both starting points:
+    """Handle both starting points:
     1) after /start command (without defined city);
     2) from forecast result
     """
@@ -42,10 +41,7 @@ async def start_points_handler(message: Message, state: FSMContext) -> None:
 
 @router.message(StateFilter(Application.city_choice))
 async def app_people(message: Message, state: FSMContext) -> None:
-    """
-    Ask how many people go on tour
-    """
-
+    """Ask how many people go on tour"""
     await message.answer(
         "How many people will go on the tour?",
         reply_markup=a.people_kb()
@@ -56,9 +52,7 @@ async def app_people(message: Message, state: FSMContext) -> None:
 
 @router.message(StateFilter(Application.people_num_choice))
 async def app_budget(message: Message, state: FSMContext) -> None:
-    """
-    Ask budget
-    """
+    """Ask budget"""
 
     # If user asks to change city, reprompt him and change state
     if message.text == "Change city":
@@ -92,9 +86,7 @@ async def app_budget(message: Message, state: FSMContext) -> None:
 
 @router.message(StateFilter(Application.budget_choice))
 async def app_trip_date(message: Message, state: FSMContext) -> None:
-    """
-    Ask trip date
-    """
+    """Ask trip date"""
 
     # Navigate to previous state
     if message.text == "Change number of people":
@@ -137,9 +129,7 @@ async def app_trip_date(message: Message, state: FSMContext) -> None:
 
 @router.message(StateFilter(Application.date_choice))
 async def app_trip_duration(message: Message, state: FSMContext) -> None:
-    """
-    Ask for trip duration
-    """
+    """Ask for trip duration"""
 
     # Navigate to previous state
     if message.text == "Change budget":
@@ -182,8 +172,7 @@ async def app_trip_duration(message: Message, state: FSMContext) -> None:
 
 @router.message(StateFilter(Application.duration_choice))
 async def app_name(message: Message, state: FSMContext) -> None:
-    """
-    Ask if name from Telegram is correct.
+    """Ask if name from Telegram is correct.
     If not, ask user name.
     """
 
@@ -231,9 +220,7 @@ async def app_name(message: Message, state: FSMContext) -> None:
 
 @router.message(StateFilter(Application.name))
 async def app_phone(message: Message, state: FSMContext) -> None:
-    """
-    Save user's name and ask phone number.
-    """
+    """Save user's name and ask phone number."""
 
     # Navigate to previous state
     if message.text == "Change trip duration":
@@ -259,9 +246,7 @@ async def app_phone(message: Message, state: FSMContext) -> None:
 
 @router.message(StateFilter(Application.phone))
 async def app_final(message: Message, state: FSMContext) -> None:
-    """
-    Save phone number and ask for confirmation or additional comment.
-    """
+    """Save phone number and ask for confirmation or additional comment."""
 
     # Navigate to previous state
     if message.text == "Change my name":
@@ -299,9 +284,7 @@ async def app_final(message: Message, state: FSMContext) -> None:
 
 @router.message(StateFilter(Application.final))
 async def app_save(message: Message, state: FSMContext) -> None:
-    """
-    Confirm application and save in in database
-    """
+    """Confirm application and save in in database"""
 
     # Navigate to previous state
     if message.text == "Change phone number":

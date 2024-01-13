@@ -21,9 +21,7 @@ NER = spacy.load("en_core_web_sm")
 
 @router.message(StateFilter(Forecast.city_choice))
 async def fcast_get_city(message: Message, state: FSMContext) -> None:
-    """
-    Get city for forecast
-    """
+    """Get city for forecast"""
 
     # Navigate to application flow
     if message.text == "Fill application":
@@ -44,9 +42,11 @@ async def fcast_get_city(message: Message, state: FSMContext) -> None:
     cities = [ent.text for ent in doc.ents if ent.label_=="GPE"]
     cities = [ent.text for ent in doc.ents if ent.label_=="GPE"]
 
+    # Inform that we use 1st city in string if there are > 1
     if len(cities) > 1:
         await message.reply("I can't multitask, sorry. I'll try to find a forecast for 1st city.")
 
+    # Store city FSM data
     if cities:
         await state.update_data(city=cities[0])
     else:
@@ -56,14 +56,14 @@ async def fcast_get_city(message: Message, state: FSMContext) -> None:
         + "<i>We can check forecast for tomorrow or 3 days ahead.</i>",
         reply_markup=f.date_kb(),
     )
+
     await state.set_state(Forecast.date_choice)
 
 
 @router.message(StateFilter(Forecast.date_choice))
 async def fcast_get_date(message: Message, state: FSMContext) -> None:
-    """
-    Ask date for forecast
-    """
+    """Ask date for forecast"""
+
     # Check if user wants to change city
     if "change" in message.text.lower():
         await message.answer(
@@ -134,18 +134,14 @@ async def fcast_get_date(message: Message, state: FSMContext) -> None:
 
 @router.message(StateFilter(Forecast.result), F.text.lower().contains("yes"))
 async def fcast_continue(message: Message, state: FSMContext) -> None:
-    """
-    Get positive answer and change flow to aplication fulfilling
-    """
+    """Get positive answer and change flow to aplication fulfilling"""
     await message.answer("Cool!", reply_markup=ReplyKeyboardRemove()) # TODO: Finish message
     await state.clear() # TODO: change for new state in Application flow
 
 
 @router.message(StateFilter(Forecast.result), F.text.lower().contains("no"))
 async def fcast_continue(message: Message, state: FSMContext) -> None:
-    """
-    Get negative answer and ask for city again
-    """
+    """Get negative answer and ask for city again"""
     await message.answer(
         "OK, write another city and we will check again!",
         reply_markup=f.new_city_kb()
