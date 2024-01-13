@@ -1,25 +1,29 @@
+from datetime import datetime
+
 from aiogram import Router, F
 from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram.filters import StateFilter
 from aiogram.fsm.context import FSMContext
+
 from FSM import Forecast, Application
 from keyboards import application as a
 from helpers import utils
-from datetime import datetime
 
 
+# Create new router
 router = Router()
 
 
 async def start_points_handler(message: Message, state: FSMContext) -> None:
     """
     Handle both starting points:
-    - After /start command (without defined city)
-    - From forecast result
+    1) after /start command (without defined city);
+    2) from forecast result
     """
+    # Get current state
     cur_state = await state.get_state()
 
-    # If user got here after /start command
+    # Ask city of user gets here after "/start" command
     if cur_state == None:
         await message.answer(
             "What city do you want to visit? \n<i>e.g. Istanbul</i>",

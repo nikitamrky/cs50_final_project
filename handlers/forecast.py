@@ -1,15 +1,18 @@
+import re
+from datetime import datetime, timedelta
+
 from aiogram import Router, F
 from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram.filters import StateFilter
 from aiogram.fsm.context import FSMContext
 from FSM import Forecast, Application
-from keyboards import general as g, forecast as f
-from helpers import get_forecast
-import re
-from datetime import datetime, timedelta
 import spacy
 
+from keyboards import general as g, forecast as f
+from helpers import get_forecast
 
+
+# Create new router
 router = Router()
 
 

@@ -3,17 +3,19 @@ from aiogram.filters import Command
 from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram.filters import StateFilter, CommandStart
 from aiogram.fsm.context import FSMContext
+import spacy
+
 from FSM import Forecast, Application
 from handlers import forecast
 from handlers import application as app
 from helpers import utils as u
 from keyboards import general as g, application as a
-import spacy
 
 
+# Create new router
 router = Router()
 
-
+# Include forecast and application routers
 router.include_routers(forecast.router, app.router)
 
 
