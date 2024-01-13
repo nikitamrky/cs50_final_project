@@ -42,7 +42,7 @@ Summary of application user flow:
 ## Technology stack
 - Python 3.9
 - aiogram: Telegram bot building framework
-- SQLite: database library
+- SQLite: database management library
 - openweathermap.org: free weather API
 - SpaCy: named entities extraction library
 
