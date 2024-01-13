@@ -53,8 +53,6 @@ Entry point file is **bot.py**.
 
 External dependencies for installation described in requirements.txt.
 
-Chatbot is located at https://t.me/cs50_tour_bot
-
 API key for Telegram bot API can be obtained via https://t.me/BotFather
 
 Weather API key can be obtained at openweathermap.org.
